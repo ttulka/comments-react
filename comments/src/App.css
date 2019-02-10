@@ -1,0 +1,16 @@
+.comments-app {
+    margin: 2em;
+}
+
+.comments-app .comment .author {
+    font-weight: bold;
+    padding-right: 1em;
+}
+
+.comments-app .comment .createdAt {
+    font-style: italic;
+}
+
+.comments-app .comment .answer {
+    border-left: 1em solid lightgray;
+}
