@@ -10,68 +10,108 @@ class Comments extends Component {
 
     constructor(props) {
         super(props);
-        this.data = data;
-        this.leaveComment = this.leaveComment.bind(this);
+
+        this.state = {
+            comments: data.comments
+        }
+
+        this.onLeaveComment = this.onLeaveComment.bind(this);
     }
 
-    formattedDate = (time) => new Date(parseInt(time * 1000)).toLocaleDateString();
-
-    leaveComment() {
-        console.log('LEave comment');
+    onLeaveComment() {
+        console.log('Leave a new comment...');
+        const newComment = {
+            "id": 123,
+            "body": "My test comment 123",
+            "createdAt": "1549648553",
+            "author": "Author 123"
+        };
+        this.setState({ comments: [newComment, ...this.state.comments] });
     }
 
     render() {
         return (
         <div className="comments-app">
             <h2>{title}</h2>
-            <form action={SERVICE_API} method="post">
-                <input type="hidden" name="parent" />
-                <div className="form-group row">
-                    <label htmlFor="nickname" className="col-sm-2 col-form-label">Nickname</label>
-                    <div className="col-sm-4">
-                        <input name="nickname" id="nickname" className="form-control"/>
-                    </div>
-                </div>
-                <div className="form-group row">
-                    <label htmlFor="captcha" className="col-sm-2 col-form-label"><img src={CAPTCHA_URL}/></label>
-                    <div className="col-sm-2">
-                        <input name="captcha" id="captcha" className="form-control"/>
-                    </div>
-                </div>
-                <div className="form-group row">
-                    <div className="col-sm-12">
-                        <textarea name="message" rows="5" className="form-control"></textarea>
-                    </div>
-                </div>
-                <button type="button" onClick={() => this.leaveComment()} className="btn btn-primary mb-2">Submit</button>
-            </form>
 
-            {this.data.comments.map(comment => {
-                return (
-                <div key={comment.id} className="comment card mb-3">
-                    <div className="card-header">
-                        <span className="author">{comment.author}</span>
-                        <span className="createdAt">{this.formattedDate(comment.createdAt)}</span>
-                    </div>
-                    <div className="body card-body">
-                        {comment.body}
-                    </div>
+            <LeaveCommentForm
+                    serviceApi={SERVICE_API}
+                    captchaUrl={CAPTCHA_URL}
+                    onLeaveComment={this.onLeaveComment} />
 
-                    {(comment.answers || []).map(answer => {
-                        return (
-                        <div key={answer.id} className="answer card-body bg-light">
-                            <div>
-                                <span className="author">{answer.author}</span>
-                                <span className="createdAt">{this.formattedDate(answer.createdAt)}</span>
-                            </div>
-                            <div className="body">{answer.body}</div>
-                        </div>
-                        );
-                    })}
-                </div>
-                );
-            })}
+            {this.state.comments.map(comment =>
+                <Comment comment={comment} key={comment.id} />
+            )}
         </div>
+        );
+    }
+}
+
+class LeaveCommentForm extends Component {
+    render() {
+        const {serviceApi, captchaUrl, onLeaveComment} = this.props;
+        return (
+        <form action={serviceApi} method="post">
+            <input type="hidden" name="parent" />
+            <div className="form-group row">
+                <label htmlFor="nickname" className="col-sm-2 col-form-label">Nickname</label>
+                <div className="col-sm-4">
+                    <input name="nickname" id="nickname" className="form-control"/>
+                </div>
+            </div>
+            <div className="form-group row">
+                <label htmlFor="captcha" className="col-sm-2 col-form-label"><img src={captchaUrl}/></label>
+                <div className="col-sm-2">
+                    <input name="captcha" id="captcha" className="form-control"/>
+                </div>
+            </div>
+            <div className="form-group row">
+                <div className="col-sm-12">
+                    <textarea name="message" rows="5" className="form-control"></textarea>
+                </div>
+            </div>
+            <button type="button" onClick={onLeaveComment} className="btn btn-primary mb-2">Submit</button>
+        </form>
+        )
+    }
+}
+
+class Comment extends Component {
+    formattedDate = (time) => new Date(parseInt(time * 1000)).toLocaleDateString();
+
+    render() {
+        const { author, createdAt, body, answers } = this.props.comment;
+        return (
+            <div className="comment card mb-3">
+                <div className="card-header">
+                    <span className="author">{author}</span>
+                    <span className="createdAt">{this.formattedDate(createdAt)}</span>
+                </div>
+                <div className="body card-body">
+                    {body}
+                </div>
+
+                {(answers || []).map(answer =>
+                    <Answer answer={answer} key={answer.id}/>
+                )}
+            </div>
+        );
+    }
+}
+
+class Answer extends Comment {
+    render() {
+        const { author, createdAt, body } = this.props.answer;
+        return (
+            <div className="answer card-body bg-light">
+                <div>
+                    <span className="author">{author}</span>
+                    <span className="createdAt">{this.formattedDate(createdAt)}</span>
+                </div>
+                <div className="body">
+                    {body}
+                </div>
+            </div>
         );
     }
 }
