@@ -2,6 +2,10 @@
     margin: 2em;
 }
 
+.comments-app form {
+    padding-bottom: 3em;
+}
+
 .comments-app .comment .author {
     font-weight: bold;
     padding-right: 1em;
