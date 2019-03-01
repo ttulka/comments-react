@@ -2,26 +2,22 @@
     margin: 2em;
 }
 
-.comments-app form {
-    padding-bottom: 3em;
-}
-
 .comments-app .comment .author {
     font-weight: bold;
     padding-right: 1em;
 }
-
 .comments-app .comment .createdAt {
     font-style: italic;
 }
-
-.comments-app .comment .answer {
+.comments-app .comment .reply {
+    float: right;
+}
+.comments-app .comment .answers {
     border-left: 1em solid lightgray;
 }
-
 .comments-app .comment .pagination .page-link {
     border: none;
-    padding: 0.5em 2.3em 0 2.3em;
+    padding: 1em 1.3em 0 1.3em;
 }
 .comments-app .comment .pagination .page-link:hover {
     background: inherit;
