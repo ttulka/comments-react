@@ -1,21 +1,46 @@
 import React, {Component} from 'react';
 import './App.css';
 
-const SERVICE_API = process.env.SERVICE_API || '/server.json';
+const SERVICE_API = process.env.SERVICE_API || '/server';
 const CAPTCHA_URL = process.env.CAPTCHA_URL || '/captcha.png';
 
 const title = 'Leave a comment';
 
 class Comments extends Component {
-
     constructor(props) {
         super(props);
 
         this.state = {
-            comments: data.comments
+            comments: [],
+            next: null
         }
 
         this.onLeaveComment = this.onLeaveComment.bind(this);
+        this.loadComments = this.loadComments.bind(this);
+    }
+
+    componentDidMount() {
+        this.loadComments('server.json');
+    }
+
+    loadComments(href) {
+        fetch(`${SERVICE_API}/${href}`)
+            .then(response => response.json())
+            .then(result => {
+                this.setComments(result.comments);
+                this.setNext(result.next);
+            })
+            .catch(err => console.error('Cannot load comments: ', err));
+    }
+
+    setComments(comments) {
+        console.debug('Setting comments', comments);
+        this.setState({comments: [...this.state.comments, ...comments]});
+    }
+
+    setNext(href) {
+        console.debug('Setting next', href);
+        this.setState({next: href});
     }
 
     onLeaveComment() {
@@ -26,7 +51,7 @@ class Comments extends Component {
             "createdAt": "1549648553",
             "author": "Author 123"
         };
-        this.setState({ comments: [newComment, ...this.state.comments] });
+        this.setState({comments: [newComment, ...this.state.comments]});
     }
 
     render() {
@@ -35,13 +60,22 @@ class Comments extends Component {
             <h2>{title}</h2>
 
             <LeaveCommentForm
-                    serviceApi={SERVICE_API}
-                    captchaUrl={CAPTCHA_URL}
-                    onLeaveComment={this.onLeaveComment} />
+                serviceApi={SERVICE_API}
+                captchaUrl={CAPTCHA_URL}
+                onLeaveComment={this.onLeaveComment}/>
 
             {this.state.comments.map(comment =>
-                <Comment comment={comment} key={comment.id} />
+                <Comment
+                    comment={comment}
+                    key={comment.id}/>
             )}
+
+            {this.state.next &&
+                <Pagination
+                    next={this.state.next}
+                    label='Older'
+                    onLoadNextItems={this.loadComments}/>
+            }
         </div>
         );
     }
@@ -52,7 +86,7 @@ class LeaveCommentForm extends Component {
         const {serviceApi, captchaUrl, onLeaveComment} = this.props;
         return (
         <form action={serviceApi} method="post">
-            <input type="hidden" name="parent" />
+            <input type="hidden" name="parent"/>
             <div className="form-group row">
                 <label htmlFor="nickname" className="col-sm-2 col-form-label">Nickname</label>
                 <div className="col-sm-4">
@@ -72,103 +106,120 @@ class LeaveCommentForm extends Component {
             </div>
             <button type="button" onClick={onLeaveComment} className="btn btn-primary mb-2">Submit</button>
         </form>
-        )
+        );
+    }
+}
+
+class Pagination extends Component {
+    loadNextItems = (loadFn, next) => e => {
+        e.preventDefault();
+        loadFn(next);
+    }
+
+    render() {
+        const {next, label = 'Next', onLoadNextItems} = this.props;
+        return  (
+        <nav>
+            <ul className="pagination">
+                <li className="page-item">
+                    <a onClick={this.loadNextItems(onLoadNextItems, next)} className="page-link" href="#">{label}</a>
+                </li>
+            </ul>
+        </nav>
+        );
     }
 }
 
 class Comment extends Component {
-    formattedDate = (time) => new Date(parseInt(time * 1000)).toLocaleDateString();
+    constructor(props) {
+        super(props);
 
-    render() {
-        const { author, createdAt, body, answers } = this.props.comment;
-        return (
-            <div className="comment card mb-3">
-                <div className="card-header">
-                    <span className="author">{author}</span>
-                    <span className="createdAt">{this.formattedDate(createdAt)}</span>
-                </div>
-                <div className="body card-body">
-                    {body}
-                </div>
+        this.state = {
+            answers: props.comment.answers,
+            next: props.comment.next
+        }
 
-                {(answers || []).map(answer =>
-                    <Answer answer={answer} key={answer.id}/>
-                )}
-            </div>
-        );
+        this.onLeaveAnswer = this.onLeaveAnswer.bind(this);
+        this.loadAnswers = this.loadAnswers.bind(this);
     }
-}
 
-class Answer extends Comment {
-    render() {
-        const { author, createdAt, body } = this.props.answer;
-        return (
-            <div className="answer card-body bg-light">
-                <div>
-                    <span className="author">{author}</span>
-                    <span className="createdAt">{this.formattedDate(createdAt)}</span>
-                </div>
-                <div className="body">
-                    {body}
-                </div>
-            </div>
-        );
+    loadAnswers(href) {
+        fetch(`${SERVICE_API}/${href}`)
+                .then(response => response.json())
+                .then(result => {
+                    this.setAnswers(result.answers);
+                    this.setNext(result.next);
+                })
+                .catch(err => console.error('Cannot load answers: ', err));
     }
-}
 
-const data = {
-    "version": "1.0",
-    "href": "/api/comments/1",
-    "comments": [
-        {
-            "id": 6,
-            "body": "My test comment 6",
+    setAnswers(answers) {
+        console.debug('Setting answers', answers);
+        this.setState({answers: [...this.state.answers, ...answers]});
+    }
+
+    setNext(href) {
+        console.debug('Setting next', href);
+        this.setState({next: href});
+    }
+
+    onLeaveAnswer() {
+        console.log('Leave a new answer...');
+        const newAnswer = {
+            "id": 999999,
+            "body": "My test answer XXX",
             "createdAt": "1549648553",
-            "author": "Author 6",
-            "answers": [
-                {
-                    "id": 9,
-                    "body": "My test answer 9",
-                    "createdAt": "1668645553",
-                    "author": "Author 9"
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "body": "My test comment 5",
-            "createdAt": "1549645553",
-            "author": "Author 5",
-            "answers": [
-                {
-                    "id": 7,
-                    "body": "My test answer 7",
-                    "createdAt": "1549645553",
-                    "author": "Author 5"
-                },
-                {
-                    "id": 8,
-                    "body": "My test answer 8",
-                    "createdAt": "1559645553",
-                    "author": "Author 8"
-                },
-                {
-                    "id": 10,
-                    "body": "My test answer 10",
-                    "createdAt": "1559945553",
-                    "author": "Author 5"
-                }
-            ],
-            "next": "server-5-1.json"
-        },
-        {
-            "id": 4,
-            "body": "My test comment 4",
-            "createdAt": "1549641553",
-            "author": "Author 4"
-        },
-    ],
-    "next": "server-1.json"
+            "author": "Author XXX"
+        };
+        this.setState({answers: [newAnswer, ...this.state.answers]});
+    }
+
+    render() {
+        const {author, createdAt, body} = this.props.comment;
+        return (
+        <div className="comment card mb-3">
+            <div className="card-header">
+                <span className="author">{author}</span>
+                <span className="createdAt">{formattedDate(createdAt)}</span>
+            </div>
+            <div className="body card-body">
+                {body}
+            </div>
+
+            {(this.state.answers || []).map(answer =>
+                 <Answer answer={answer} key={answer.id}/>
+            )}
+
+            {this.state.next &&
+             <Pagination
+                 next={this.state.next}
+                 label='More...'
+                 onLoadNextItems={this.loadAnswers}/>
+            }
+        </div>
+        );
+    }
+}
+
+class Answer extends Component {
+    render() {
+        const {author, createdAt, body} = this.props.answer;
+        return (
+        <div className="answer card-body bg-light">
+            <div>
+                <span className="author">{author}</span>
+                <span className="createdAt">{formattedDate(createdAt)}</span>
+            </div>
+            <div className="body">
+                {body}
+            </div>
+        </div>
+        );
+    }
+}
+
+function formattedDate(time) {
+    return new Date(parseInt(time * 1000)).toLocaleDateString();
 }
 
 export default Comments;

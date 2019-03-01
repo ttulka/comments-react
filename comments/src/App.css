@@ -18,3 +18,11 @@
 .comments-app .comment .answer {
     border-left: 1em solid lightgray;
 }
+
+.comments-app .comment .pagination .page-link {
+    border: none;
+    padding: 0.5em 2.3em 0 2.3em;
+}
+.comments-app .comment .pagination .page-link:hover {
+    background: inherit;
+}
