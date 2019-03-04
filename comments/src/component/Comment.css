@@ -1,7 +1,3 @@
-.comments-app {
-    margin: 2em;
-}
-
 .comments-app .comment .author {
     font-weight: bold;
     padding-right: 1em;
@@ -14,11 +10,4 @@
 }
 .comments-app .comment .answers {
     border-left: 1em solid lightgray;
-}
-.comments-app .comment .pagination .page-link {
-    border: none;
-    padding: 1em 1.3em 0 1.3em;
-}
-.comments-app .comment .pagination .page-link:hover {
-    background: inherit;
 }

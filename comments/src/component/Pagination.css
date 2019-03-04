@@ -1,0 +1,7 @@
+.comments-app .comment .pagination .page-link {
+    border: none;
+    padding: 1em 1.3em 0 1.3em;
+}
+.comments-app .comment .pagination .page-link:hover {
+    background: inherit;
+}
