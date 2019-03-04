@@ -1,3 +1,11 @@
 .comments-app {
     margin: 2em;
 }
+
+.comments-app .loading {
+    height: 2em;
+    background-image: url("/loading.gif");
+    background-repeat: no-repeat;
+    background-size: 2em 2em;
+    background-position: center;
+}

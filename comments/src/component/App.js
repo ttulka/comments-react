@@ -23,7 +23,8 @@ class Comments extends Component {
 
         this.state = {
             comments: [],
-            next: null
+            next: null,
+            isLoading: false
         }
 
         this.onLoadComments = this.onLoadComments.bind(this);
@@ -51,12 +52,14 @@ class Comments extends Component {
     }
 
     onLoadComments(href) {
+        this.setState({isLoading: true});
         this.loadComments(href)
             .then(result => {
                 this.setComments(result.comments);
                 this.setNext(result.next);
+                this.setState({isLoading: false});
             })
-            .catch(err => console.error('Cannot load comments: ', err));
+            .catch(err => this.setState({isLoading: false}) && console.error('Cannot load comments: ', err));
     }
 
     onLeaveComment(comment, captcha) {
@@ -82,6 +85,10 @@ class Comments extends Component {
                     onLeaveMessage={this.onLeaveComment}
                     captchaUrl={CAPTCHA_COMMENT_URL}/>
             </div>
+
+            {this.state.isLoading &&
+                <div className="loading"></div>
+            }
 
             {this.state.comments.map(comment =>
                 <Comment key={comment.id}
