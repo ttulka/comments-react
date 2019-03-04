@@ -2,12 +2,15 @@ import React, {Component} from 'react';
 
 import './LeaveMessageForm.css';
 
+const success_msg_def = 'Thanks for your message!';
+
 class LeaveMessageForm extends Component {
     constructor(props) {
         super(props);
 
         this.onLeaveMessage = props.onLeaveMessage;
         this.captchaUrl = props.captchaUrl;
+        this.successMsg = props.successMsg || success_msg_def;
 
         this.state = {
             name: null,
@@ -32,10 +35,10 @@ class LeaveMessageForm extends Component {
 
         this.onLeaveMessage(message, this.state.captcha)
             .then(() => this.setState({name: null, message: null, captcha: null}))
-            .then(() => this.setState({info: 'Thanks for your message!'}))
+            .then(() => this.setState({info: this.successMsg}))
             .catch(err => {
                 this.setState({error: err.message});
-                console.log('Error by sending', err);
+                console.log('Error by sending a message', err);
             });
     }
 

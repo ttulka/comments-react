@@ -8,14 +8,15 @@ class Pagination extends Component {
     constructor(props) {
         super(props);
 
-        this.next = props.next;
-        this.onLoadNextItems = props.onLoadNextItems;
         this.label = props.label || label_def;
+        this.onLoadNextItems = props.onLoadNextItems;
+
+        this.onNext = this.onNext.bind(this);
     }
 
-    loadNextItems = (loadFn, next) => e => {
+    onNext(e) {
         e.preventDefault();
-        loadFn(next);
+        this.onLoadNextItems();
     }
 
     render() {
@@ -23,7 +24,7 @@ class Pagination extends Component {
         <nav>
             <ul className="pagination">
                 <li className="page-item">
-                    <a onClick={this.loadNextItems(this.onLoadNextItems, this.next)} className="page-link" href="#">{this.label}</a>
+                    <a onClick={this.onNext} className="page-link" href="#">{this.label}</a>
                 </li>
             </ul>
         </nav>

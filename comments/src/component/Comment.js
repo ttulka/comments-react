@@ -5,6 +5,8 @@ import Pagination from './Pagination';
 
 import './Comment.css';
 
+const nextAnswers_label = 'More...'
+
 class Comment extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +19,8 @@ class Comment extends Component {
         this.state = {
             answers: props.comment.answers || [],
             next: props.comment.next,
-            formVisible: false
+            formVisible: false,
+            isLoading: false
         }
 
         this.formRef = React.createRef();
@@ -27,13 +30,15 @@ class Comment extends Component {
         this.onLeaveAnswer = this.onLeaveAnswer.bind(this);
     }
 
-    onLoadAnswers(href) {
+    onLoadAnswers(href = this.state.next) {
+        this.setState({isLoading: true});
         this.loadAnswers(href)
             .then(result => {
                 this.setAnswers(result.answers);
                 this.setNext(result.next);
+                this.setState({isLoading: false});
             })
-            .catch(err => console.error('Cannot load answers: ', err));
+            .catch(err => this.setState({isLoading: false}) && console.error('Cannot load answers: ', err));
     }
 
     onLeaveAnswer(answer, captcha) {
@@ -73,10 +78,13 @@ class Comment extends Component {
                      <Answer answer={answer} key={answer.id}/>
                 )}
 
+                {this.state.isLoading &&
+                    <div className="loading"></div>
+                }
+
                 {this.state.next &&
                  <Pagination
-                     next={this.state.next}
-                     label='More...'
+                     label={nextAnswers_label}
                      onLoadNextItems={this.onLoadAnswers}/>
                 }
 

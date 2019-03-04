@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+const err_msg = {
+    commentId: 'Comment ID must be set!',
+    name: 'Please fill your name!',
+    message: 'Please fill your message!',
+    captcha: 'Please fill the captcha!',
+}
+
 class CommentService {
     constructor(serviceApi) {
         this.serviceApi = serviceApi;
@@ -17,13 +24,13 @@ class CommentService {
 
     saveComment({name, message}, captcha) {
         if (!name) {
-            return Promise.reject(new Error('Please fill your name!'));
+            return Promise.reject(new Error(err_msg.name));
         }
         if (!message) {
-            return Promise.reject(new Error('Please fill your message!'));
+            return Promise.reject(new Error(err_msg.message));
         }
         if (!captcha) {
-            return Promise.reject(new Error('Please fill the captcha!'));
+            return Promise.reject(new Error(err_msg.captcha));
         }
 
         return new Promise((resolve, reject) => {
@@ -40,28 +47,26 @@ class CommentService {
 
     saveAnswer(commentId, {name, message}, captcha) {
         if (!commentId) {
-            return Promise.reject(new Error('Comment ID must be set!'));
+            return Promise.reject(new Error(err_msg.commentId));
         }
         if (!name) {
-            return Promise.reject(new Error('Please fill your name!'));
+            return Promise.reject(new Error(err_msg.name));
         }
         if (!message) {
-            return Promise.reject(new Error('Please fill your message!'));
+            return Promise.reject(new Error(err_msg.message));
         }
         if (!captcha) {
-            return Promise.reject(new Error('Please fill the captcha!'));
+            return Promise.reject(new Error(err_msg.captcha));
         }
 
         return new Promise((resolve, reject) => {
             // TODO
-            console.log('start promising')
             const answer = {
                 id: new Date().getTime(),
                 body: message,
                 author: name,
                 createdAt: new Date().getTime() / 1000
             };
-            console.log('ANSWER', answer)
             resolve(answer);
         });
     }

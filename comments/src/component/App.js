@@ -16,6 +16,7 @@ const CAPTCHA_ANSWER_URL = process.env.CAPTCHA_URL || '/captcha.png';
 const service = new CommentService(SERVICE_API);
 
 const title = 'Leave a comment';
+const nextComments_label = 'Older';
 
 class Comments extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class Comments extends Component {
         return service.saveAnswer(commentId, answer, captcha);
     }
 
-    onLoadComments(href) {
+    onLoadComments(href = this.state.next) {
         this.setState({isLoading: true});
         this.loadComments(href)
             .then(result => {
@@ -100,8 +101,7 @@ class Comments extends Component {
 
             {this.state.next &&
                 <Pagination
-                    next={this.state.next}
-                    label='Older'
+                    label={nextComments_label}
                     onLoadNextItems={this.onLoadComments}/>
             }
         </div>
