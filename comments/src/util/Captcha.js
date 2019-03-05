@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 class Captcha {
     constructor(captchaCookieName) {
         this.captchaCookieName = captchaCookieName;
@@ -21,19 +19,20 @@ class Captcha {
 
         const renderCanvas = (canvas, code) => {
             const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Create gradients
-            const grdBW = ctx.createLinearGradient(0, 0, 150, 0);
+            const grdBW = ctx.createLinearGradient(0, 0, canvas.width, 0);
             grdBW.addColorStop(0, 'black');
             grdBW.addColorStop(1, 'white');
 
-            const grdWB = ctx.createLinearGradient(0, 0, 150, 0);
+            const grdWB = ctx.createLinearGradient(0, 0, canvas.width, 0);
             grdWB.addColorStop(0, 'white');
             grdWB.addColorStop(1, 'black');
 
             // Fill with gradient
             ctx.fillStyle = grdBW;
-            ctx.fillRect(0, 0, 150, 25);
+            ctx.fillRect(0, 0, canvas.width, 25);
 
             // Text
             ctx.fillStyle = grdWB;
