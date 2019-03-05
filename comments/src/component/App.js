@@ -10,6 +10,8 @@ import './App.css';
 
 import Config from '../config.json';
 
+const restService = new CommentService(Config.ServiceHost);
+
 const title = 'Leave a comment';
 const nextComments_label = 'Older';
 
@@ -17,7 +19,6 @@ class Comments extends Component {
     constructor(props) {
         super(props);
 
-        this.restService = new CommentService(Config.ServiceHost);
         this.serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', props.articleId);
 
         this.captchaCommentUrl = Config.CaptchaCommentUrl;
@@ -38,19 +39,19 @@ class Comments extends Component {
     }
 
     loadComments(href) {
-        return this.restService.loadComments(href);
+        return restService.loadComments(href);
     }
 
     loadAnswers(href) {
-        return this.restService.loadAnswers(href);
+        return restService.loadAnswers(href);
     }
 
     saveComment(comment, captcha) {
-        return this.restService.saveComment(comment, captcha);
+        return restService.saveComment(comment, captcha);
     }
 
     saveAnswer(commentId, answer, captcha) {
-        return this.restService.saveAnswer(commentId, answer, captcha);
+        return restService.saveAnswer(commentId, answer, captcha);
     }
 
     onLoadComments(href = this.state.next) {
