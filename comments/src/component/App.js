@@ -10,14 +10,15 @@ import './App.css';
 
 import Config from '../config.json';
 
-const service = new CommentService(Config.ServiceAPI);
-
 const title = 'Leave a comment';
 const nextComments_label = 'Older';
 
 class Comments extends Component {
     constructor(props) {
         super(props);
+
+        this.restService = new CommentService(Config.ServiceHost);
+        this.serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', props.articleId);
 
         this.captchaCommentUrl = Config.CaptchaCommentUrl;
         this.captchaAnswerUrl = Config.CaptchaAnswerUrl;
@@ -33,23 +34,23 @@ class Comments extends Component {
     }
 
     componentDidMount() {
-        this.onLoadComments('server.json');
+        this.onLoadComments(this.serviceCommentsHref);
     }
 
     loadComments(href) {
-        return service.loadComments(href);
+        return this.restService.loadComments(href);
     }
 
     loadAnswers(href) {
-        return service.loadAnswers(href);
+        return this.restService.loadAnswers(href);
     }
 
     saveComment(comment, captcha) {
-        return service.saveComment(comment, captcha);
+        return this.restService.saveComment(comment, captcha);
     }
 
     saveAnswer(commentId, answer, captcha) {
-        return service.saveAnswer(commentId, answer, captcha);
+        return this.restService.saveAnswer(commentId, answer, captcha);
     }
 
     onLoadComments(href = this.state.next) {
@@ -60,7 +61,10 @@ class Comments extends Component {
                 this.setNext(result.next);
                 this.setState({isLoading: false});
             })
-            .catch(err => this.setState({isLoading: false}) && console.error('Cannot load comments: ', err));
+            .catch(err => {
+                console.error('Cannot load comments:', err.message, err.response);
+                this.setState({isLoading: false});
+            });
     }
 
     onLeaveComment(comment, captcha) {

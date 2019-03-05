@@ -13,12 +13,12 @@ class CommentService {
     }
 
     loadComments(href) {
-        return axios.get(`${this.serviceApi}/${href}`)
+        return axios.get(`${this.serviceApi}${href}`)
            .then(response => response.data);
     }
 
     loadAnswers(href) {
-        return axios.get(`${this.serviceApi}/${href}`)
+        return axios.get(`${this.serviceApi}${href}`)
            .then(response => response.data);
     }
 

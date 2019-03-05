@@ -1,5 +1,6 @@
 {
-  "ServiceAPI": "/server",
-  "CaptchaCommentUrl": "http://blog.net21.cz/captcha.php?suffix=comment",
-  "CaptchaAnswerUrl": "http://blog.net21.cz/captcha.php?suffix=answer"
+  "ServiceHost": "http://blog.net21.cz",
+  "ServiceComments": "/api/articles/[:articleId:]/comments",
+  "CaptchaCommentUrl": "http://blog.net21.cz/captcha.php?suffix=blogcomment",
+  "CaptchaAnswerUrl": "http://blog.net21.cz/captcha.php?suffix=bloganswer"
 }

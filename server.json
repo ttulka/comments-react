@@ -48,7 +48,7 @@
             "body": "My test comment 4",
             "createdAt": "1549641553",
             "author": "Author 4"
-        },
+        }
     ],
     "next": "server-1.json"
 }

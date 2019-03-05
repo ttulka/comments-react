@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import './LeaveMessageForm.css';
 
 const success_msg_def = 'Thanks for your message!';
+const error_msg = 'Server error. Please try it again.';
 
 class LeaveMessageForm extends Component {
     constructor(props) {
@@ -38,10 +39,22 @@ class LeaveMessageForm extends Component {
             .then(() => this.setState({name: null, message: null, captcha: null}))
             .then(() => this.setState({info: this.successMsg}))
             .catch(err => {
-                console.log('Error by sending a message', err);
-                this.setState({error: err.message});
+                console.log('Error by sending a message', err.message, err.response);
+                this.handleError(err);
                 this.reloadCaptcha();
             });
+    }
+
+    handleError(err) {
+        if (err.response) {
+            if (err.response.status === 400 && err.response.data) {
+                this.setState({error: err.response.data});
+            } else {
+                this.setState({error: error_msg});
+            }
+        } else {
+            this.setState({error: err.message});
+        }
     }
 
     onInputChange(e) {

@@ -21,7 +21,7 @@
             "body": "My test comment 1",
             "createdAt": "1529641553",
             "author": "Author 1"
-        },
+        }
     ],
-    "next": "server-1.json"
+    "previous": "server.json"
 }

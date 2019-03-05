@@ -38,7 +38,10 @@ class Comment extends Component {
                 this.setNext(result.next);
                 this.setState({isLoading: false});
             })
-            .catch(err => this.setState({isLoading: false}) && console.error('Cannot load answers: ', err));
+            .catch(err => {
+                console.error('Cannot load answers:', err.message, err.response);
+                this.setState({isLoading: false});
+            });
     }
 
     onLeaveAnswer(answer, captcha) {
