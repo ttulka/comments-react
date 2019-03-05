@@ -1,8 +1,9 @@
 .comments-app .leaveMessageForm .captcha {
     height: 2em;
     width: 7em;
+    padding-top: 0.1em;
 }
-.comments-app .leaveMessageForm .captcha img {
+.comments-app .leaveMessageForm .captcha canvas {
     height: 2em;
     max-width: 7em;
 }

@@ -20,7 +20,7 @@ class Comments extends Component {
         super(props);
 
         this.serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', props.articleId);
-        this.captchaUrl = Config.CaptchaUrl;
+        this.captchaCookieName = Config.CaptchaCookieName;
 
         this.state = {
             comments: [],
@@ -89,7 +89,7 @@ class Comments extends Component {
             <div className="pb-3">
                 <LeaveMessageForm
                     onLeaveMessage={this.onLeaveComment}
-                    captchaUrl={this.captchaUrl}/>
+                    captchaCookieName={this.captchaCookieName}/>
             </div>
 
             {this.state.isLoading &&
@@ -101,7 +101,7 @@ class Comments extends Component {
                     comment={comment}
                     loadAnswers={this.loadAnswers}
                     saveAnswer={this.saveAnswer}
-                    captchaUrl={this.captchaUrl}/>
+                    captchaCookieName={this.captchaCookieName}/>
             )}
 
             {this.state.next &&

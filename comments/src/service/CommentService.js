@@ -1,13 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const err_msg = {
-    name: 'Please fill your name!',
-    message: 'Please fill your message!',
-    captcha: 'Please fill the captcha!',
-    captcha_wrong: 'Captcha does not match!',
-}
-
 class CommentService {
     constructor(serviceApi, captchaCookieName) {
         this.serviceApi = serviceApi;
@@ -25,22 +18,6 @@ class CommentService {
     }
 
     saveComment(href, {name, message}, captcha) {
-        if (!name) {
-            return Promise.reject(new Error(err_msg.name));
-        }
-        if (!message) {
-            return Promise.reject(new Error(err_msg.message));
-        }
-        if (!captcha) {
-            return Promise.reject(new Error(err_msg.captcha));
-        }
-
-        const captchaCookie = Cookies.get(this.captchaCookieName);
-        if (captchaCookie && captchaCookie !== captcha) {
-            return Promise.reject(new Error(err_msg.captcha_wrong));
-        }
-        console.log('COOKIE', this.captchaCookieName, Cookies.get(this.captchaCookieName), captcha);
-
         return axios({
             url: `${this.serviceApi}${href}`,
             method: 'post',
@@ -55,22 +32,6 @@ class CommentService {
     }
 
     saveAnswer(href, {name, message}, captcha) {
-        if (!name) {
-            return Promise.reject(new Error(err_msg.name));
-        }
-        if (!message) {
-            return Promise.reject(new Error(err_msg.message));
-        }
-        if (!captcha) {
-            return Promise.reject(new Error(err_msg.captcha));
-        }
-
-        const captchaCookie = Cookies.get(this.captchaCookieName);
-        if (captchaCookie && captchaCookie !== captcha) {
-            return Promise.reject(new Error(err_msg.captcha_wrong));
-        }
-        console.log('COOKIE', this.captchaCookieName, Cookies.get(this.captchaCookieName), captcha);
-
         return axios({
             url: `${this.serviceApi}${href}`,
             method: 'post',

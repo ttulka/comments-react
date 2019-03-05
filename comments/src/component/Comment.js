@@ -14,7 +14,7 @@ class Comment extends Component {
         this.comment = props.comment;
         this.loadAnswers = props.loadAnswers;
         this.saveAnswer = props.saveAnswer;
-        this.captchaUrl = props.captchaUrl;
+        this.captchaCookieName = props.captchaCookieName;
 
         this.state = {
             answers: props.comment.answers || [],
@@ -96,7 +96,7 @@ class Comment extends Component {
                  <div className="p-3">
                      <h3>Your answer</h3>
                      <LeaveMessageForm
-                         captchaUrl={this.captchaUrl}
+                         captchaCookieName={this.captchaCookieName}
                          onLeaveMessage={this.onLeaveAnswer}/>
                  </div>
                 }
