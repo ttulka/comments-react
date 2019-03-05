@@ -16,6 +16,7 @@ class LeaveMessageForm extends Component {
             name: null,
             message: null,
             captcha: null,
+            captchaUrl: props.captchaUrl,
             info: null,
             error: null
         }
@@ -37,8 +38,9 @@ class LeaveMessageForm extends Component {
             .then(() => this.setState({name: null, message: null, captcha: null}))
             .then(() => this.setState({info: this.successMsg}))
             .catch(err => {
-                this.setState({error: err.message});
                 console.log('Error by sending a message', err);
+                this.setState({error: err.message});
+                this.reloadCaptcha();
             });
     }
 
@@ -48,9 +50,19 @@ class LeaveMessageForm extends Component {
         this.setState({info: null, error: null});
     }
 
+    reloadCaptcha() {
+        this.setState({captchaUrl: '/assets/img/loading.gif', captcha: null});
+        this.setState({captchaUrl: this.captchaUrl});
+    }
+
+    uniqueId() {
+        return String(new Date().getTime() + '' + Math.random()).replace('.', '');
+    }
+
     render() {
+        const formId = this.uniqueId();
         return (
-        <form onSubmit={this.onSubmit} method="post">
+        <form onSubmit={this.onSubmit} method="post" className="leaveMessageForm">
             {this.state.error &&
              <div className="alert alert-danger" role="alert">
                 {this.state.error}
@@ -62,16 +74,16 @@ class LeaveMessageForm extends Component {
              </div>
             }
             <div className="form-group row">
-                <label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
+                <label htmlFor={"name-" + formId} className="col-sm-2 col-form-label">Name</label>
                 <div className="col-sm-4">
-                    <input name="name" id="name" className="form-control"
+                    <input name="name" id={"name-" + formId} className="form-control"
                         value={this.state.name || ''} onChange={this.onInputChange}/>
                 </div>
             </div>
             <div className="form-group row">
-                <label htmlFor="captcha" className="col-sm-2 col-form-label"><img src={this.captchaUrl} alt="Captcha"/></label>
+                <label htmlFor={"captcha-" + formId} className="col-sm-2 col-form-label captcha"><img src={this.state.captchaUrl} alt="Captcha"/></label>
                 <div className="col-sm-2">
-                    <input name="captcha" id="captcha" className="form-control"
+                    <input name="captcha" id={"captcha-" + formId} className="form-control"
                         value={this.state.captcha || ''} onChange={this.onInputChange}/>
                 </div>
             </div>

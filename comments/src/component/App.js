@@ -8,12 +8,9 @@ import Pagination from './Pagination';
 
 import './App.css';
 
-const SERVICE_API = process.env.SERVICE_API || '/server';
+import Config from '../config.json';
 
-const CAPTCHA_COMMENT_URL = process.env.CAPTCHA_URL || '/captcha.png';
-const CAPTCHA_ANSWER_URL = process.env.CAPTCHA_URL || '/captcha.png';
-
-const service = new CommentService(SERVICE_API);
+const service = new CommentService(Config.ServiceAPI);
 
 const title = 'Leave a comment';
 const nextComments_label = 'Older';
@@ -21,6 +18,9 @@ const nextComments_label = 'Older';
 class Comments extends Component {
     constructor(props) {
         super(props);
+
+        this.captchaCommentUrl = Config.CaptchaCommentUrl;
+        this.captchaAnswerUrl = Config.CaptchaAnswerUrl;
 
         this.state = {
             comments: [],
@@ -84,7 +84,7 @@ class Comments extends Component {
             <div className="pb-3">
                 <LeaveMessageForm
                     onLeaveMessage={this.onLeaveComment}
-                    captchaUrl={CAPTCHA_COMMENT_URL}/>
+                    captchaUrl={this.captchaCommentUrl}/>
             </div>
 
             {this.state.isLoading &&
@@ -96,7 +96,7 @@ class Comments extends Component {
                     comment={comment}
                     loadAnswers={this.loadAnswers}
                     saveAnswer={this.saveAnswer}
-                    captchaUrl={CAPTCHA_ANSWER_URL}/>
+                    captchaUrl={this.captchaAnswerUrl}/>
             )}
 
             {this.state.next &&

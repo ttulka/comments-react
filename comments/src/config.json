@@ -1,0 +1,5 @@
+{
+  "ServiceAPI": "/server",
+  "CaptchaCommentUrl": "http://blog.net21.cz/captcha.php?suffix=comment",
+  "CaptchaAnswerUrl": "http://blog.net21.cz/captcha.php?suffix=answer"
+}
