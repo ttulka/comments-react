@@ -1,7 +1,3 @@
-.comments-app {
-    margin: 2em;
-}
-
 .comments-app .loading {
     height: 2em;
     background-image: url("/assets/img/loading.gif");

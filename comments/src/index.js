@@ -2,4 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Comments from './component/App';
 
-ReactDOM.render(<Comments articleId="123" />, document.getElementById('comments'));
+const commentsDiv = document.getElementById('comments');
+const articleId = commentsDiv.getAttribute('articleId')
+
+ReactDOM.render(<Comments articleId={articleId} />, commentsDiv);

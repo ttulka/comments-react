@@ -10,7 +10,7 @@ import './App.css';
 
 import Config from '../config.json';
 
-const restService = new CommentService(Config.ServiceHost);
+const restService = new CommentService(Config.ServiceHost, Config.CaptchaCookieName);
 
 const title = 'Leave a comment';
 const nextComments_label = 'Older';
@@ -20,9 +20,7 @@ class Comments extends Component {
         super(props);
 
         this.serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', props.articleId);
-
-        this.captchaCommentUrl = Config.CaptchaCommentUrl;
-        this.captchaAnswerUrl = Config.CaptchaAnswerUrl;
+        this.captchaUrl = Config.CaptchaUrl;
 
         this.state = {
             comments: [],
@@ -32,6 +30,8 @@ class Comments extends Component {
 
         this.onLoadComments = this.onLoadComments.bind(this);
         this.onLeaveComment = this.onLeaveComment.bind(this);
+        this.saveComment = this.saveComment.bind(this);
+        this.saveAnswer = this.saveAnswer.bind(this);
     }
 
     componentDidMount() {
@@ -47,11 +47,11 @@ class Comments extends Component {
     }
 
     saveComment(comment, captcha) {
-        return restService.saveComment(comment, captcha);
+        return restService.saveComment(this.serviceCommentsHref, comment, captcha);
     }
 
     saveAnswer(commentId, answer, captcha) {
-        return restService.saveAnswer(commentId, answer, captcha);
+        return restService.saveAnswer(`${this.serviceCommentsHref}/${commentId}`, answer, captcha);
     }
 
     onLoadComments(href = this.state.next) {
@@ -89,7 +89,7 @@ class Comments extends Component {
             <div className="pb-3">
                 <LeaveMessageForm
                     onLeaveMessage={this.onLeaveComment}
-                    captchaUrl={this.captchaCommentUrl}/>
+                    captchaUrl={this.captchaUrl}/>
             </div>
 
             {this.state.isLoading &&
@@ -101,7 +101,7 @@ class Comments extends Component {
                     comment={comment}
                     loadAnswers={this.loadAnswers}
                     saveAnswer={this.saveAnswer}
-                    captchaUrl={this.captchaAnswerUrl}/>
+                    captchaUrl={this.captchaUrl}/>
             )}
 
             {this.state.next &&

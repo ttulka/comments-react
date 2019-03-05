@@ -1,15 +1,17 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const err_msg = {
-    commentId: 'Comment ID must be set!',
     name: 'Please fill your name!',
     message: 'Please fill your message!',
     captcha: 'Please fill the captcha!',
+    captcha_wrong: 'Captcha does not match!',
 }
 
 class CommentService {
-    constructor(serviceApi) {
+    constructor(serviceApi, captchaCookieName) {
         this.serviceApi = serviceApi;
+        this.captchaCookieName = captchaCookieName;
     }
 
     loadComments(href) {
@@ -22,7 +24,7 @@ class CommentService {
            .then(response => response.data);
     }
 
-    saveComment({name, message}, captcha) {
+    saveComment(href, {name, message}, captcha) {
         if (!name) {
             return Promise.reject(new Error(err_msg.name));
         }
@@ -33,22 +35,26 @@ class CommentService {
             return Promise.reject(new Error(err_msg.captcha));
         }
 
-        return new Promise((resolve, reject) => {
-            // TODO
-            const comment = {
-                id: new Date().getTime(),
+        const captchaCookie = Cookies.get(this.captchaCookieName);
+        if (captchaCookie && captchaCookie !== captcha) {
+            return Promise.reject(new Error(err_msg.captcha_wrong));
+        }
+        console.log('COOKIE', this.captchaCookieName, Cookies.get(this.captchaCookieName), captcha);
+
+        return axios({
+            url: `${this.serviceApi}${href}`,
+            method: 'post',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: formUrlEncoded({
                 body: message,
-                author: name,
-                createdAt: new Date().getTime() / 1000
-            };
-            resolve(comment);
-        });
+                author: name
+            })
+        })
+            .then(res => { console.log('RESPONSE', res); return res;})
+            .then(response => response.data);
     }
 
-    saveAnswer(commentId, {name, message}, captcha) {
-        if (!commentId) {
-            return Promise.reject(new Error(err_msg.commentId));
-        }
+    saveAnswer(href, {name, message}, captcha) {
         if (!name) {
             return Promise.reject(new Error(err_msg.name));
         }
@@ -59,17 +65,28 @@ class CommentService {
             return Promise.reject(new Error(err_msg.captcha));
         }
 
-        return new Promise((resolve, reject) => {
-            // TODO
-            const answer = {
-                id: new Date().getTime(),
+        const captchaCookie = Cookies.get(this.captchaCookieName);
+        if (captchaCookie && captchaCookie !== captcha) {
+            return Promise.reject(new Error(err_msg.captcha_wrong));
+        }
+        console.log('COOKIE', this.captchaCookieName, Cookies.get(this.captchaCookieName), captcha);
+
+        return axios({
+            url: `${this.serviceApi}${href}`,
+            method: 'post',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: formUrlEncoded({
                 body: message,
-                author: name,
-                createdAt: new Date().getTime() / 1000
-            };
-            resolve(answer);
-        });
+                author: name
+            })
+        })
+            .then(res => { console.log('RESPONSE', res); return res;})
+            .then(response => response.data);
     }
+}
+
+function formUrlEncoded(x){
+    return Object.keys(x).reduce((p, c) => p + `&${c}=${encodeURIComponent(x[c])}`, '');
 }
 
 export default CommentService;
