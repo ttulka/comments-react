@@ -22,8 +22,8 @@ class CommentService {
             method: 'post',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: formUrlEncoded({
-                body: message,
-                author: name
+                body: secureString(message),
+                author: secureString(name)
             })
         })
             .then(res => { console.log('RESPONSE', res); return res;})
@@ -36,8 +36,8 @@ class CommentService {
             method: 'post',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: formUrlEncoded({
-                body: message,
-                author: name
+                body: secureString(message),
+                author: secureString(name)
             })
         })
             .then(res => { console.log('RESPONSE', res); return res;})
@@ -45,8 +45,18 @@ class CommentService {
     }
 }
 
-function formUrlEncoded(x){
+function formUrlEncoded(x) {
     return Object.keys(x).reduce((p, c) => p + `&${c}=${encodeURIComponent(x[c])}`, '');
+}
+
+function secureString(str, maxLength = 1000) {
+    return /*encodedString(*/str.substring(0, maxLength)/*)*/;
+}
+
+function encodedString(rawStr) {
+    return rawStr.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+        return '&#'+i.charCodeAt(0)+';';
+    });
 }
 
 export default CommentService;

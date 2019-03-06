@@ -5,6 +5,9 @@
 .comments-app .comment .createdAt {
     font-style: italic;
 }
+.comments-app .comment .body {
+    white-space: pre-line;
+}
 .comments-app .comment .reply {
     float: right;
 }

@@ -40,29 +40,18 @@ class LeaveMessageForm extends Component {
         this.reloadCaptcha();
     }
 
+    onInputChange(e) {
+        const {name, value} = e.target;
+        this.setState({[name]: value, [name + 'Valid']: true});
+        this.setState({info: null, error: null});
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
-        if (!this.state.name) {
-            this.setState({nameValid: false});
+        if (!this.validateForm()) {
             return;
         }
-        if (!this.state.captcha) {
-            this.setState({captchaValid: false});
-            return;
-        }
-        if (!this.state.message) {
-            this.setState({messageValid: false});
-            return;
-        }
-
-        if (this.state.captcha !== this.captcha.getCode()) {
-            this.setState({captchaValid: false, error: captcha_msg});
-            this.reloadCaptcha();
-            return;
-        }
-
-        this.reloadCaptcha();
 
         const message = {
             name: this.state.name,
@@ -74,11 +63,37 @@ class LeaveMessageForm extends Component {
             .then(() => this.setState({info: this.successMsg}))
             .catch(err => {
                 console.log('Error by sending a message', err.message, err.response);
-                this.handleError(err);
-            });
+                this.handleResponseError(err);
+            })
+            .finally(() => this.reloadCaptcha());
     }
 
-    handleError(err) {
+    validateForm() {
+        let hasError = false;
+
+        if (!this.state.name) {
+            this.setState({nameValid: false});
+            hasError = true;
+        }
+        if (!this.state.captcha) {
+            this.setState({captchaValid: false});
+            hasError = true;
+        }
+        if (!this.state.message) {
+            this.setState({messageValid: false});
+            hasError = true;
+        }
+
+        if (this.state.captcha && this.state.captcha.toUpperCase() !== this.captcha.getCode().toUpperCase()) {
+            this.setState({captchaValid: false, error: captcha_msg});
+            this.reloadCaptcha();
+            hasError = true;
+        }
+
+        return !hasError;
+    }
+
+    handleResponseError(err) {
         if (err.response) {
             if (err.response.status === 400 && err.response.data) {
                 this.setState({error: err.response.data});
@@ -88,12 +103,6 @@ class LeaveMessageForm extends Component {
         } else {
             this.setState({error: err.message});
         }
-    }
-
-    onInputChange(e) {
-        const {name, value} = e.target;
-        this.setState({[name]: value, [name + 'Valid']: true});
-        this.setState({info: null, error: null});
     }
 
     reloadCaptcha() {
@@ -122,7 +131,7 @@ class LeaveMessageForm extends Component {
                 <label htmlFor={"name-" + this.formUUID} className="col-sm-2 col-form-label">Name</label>
                 <div className="col-sm-4">
                     <input name="name" id={"name-" + this.formUUID} className={"form-control" + (!this.state.nameValid ? ' is-invalid' : '')}
-                        value={this.state.name || ''} onChange={this.onInputChange}/>
+                        value={this.state.name || ''} onChange={this.onInputChange} maxLength="50"/>
                 </div>
             </div>
             <div className="form-group row">
@@ -130,13 +139,13 @@ class LeaveMessageForm extends Component {
                     <canvas id={"captchaImg-" + this.formUUID} width="170" height="50"></canvas></label>
                 <div className="col-sm-2">
                     <input name="captcha" id={"captcha-" + this.formUUID} className={"form-control" + (!this.state.captchaValid ? ' is-invalid' : '')}
-                        value={this.state.captcha || ''} onChange={this.onInputChange}/>
+                        value={this.state.captcha || ''} onChange={this.onInputChange} maxLength="10"/>
                 </div>
             </div>
             <div className="form-group row">
                 <div className="col-sm-12">
                     <textarea name="message" rows="5" className={"form-control" + (!this.state.messageValid ? ' is-invalid' : '')}
-                        value={this.state.message || ''} onChange={this.onInputChange}/>
+                        value={this.state.message || ''} onChange={this.onInputChange} maxLength="1000"/>
                 </div>
             </div>
             <button type="submit" className="btn btn-primary mb-2">Submit</button>
