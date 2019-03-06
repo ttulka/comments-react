@@ -25,9 +25,7 @@ class CommentService {
                 body: secureString(message),
                 author: secureString(name)
             })
-        })
-            .then(res => { console.log('RESPONSE', res); return res;})
-            .then(response => response.data);
+        }).then(response => response.data);
     }
 
     saveAnswer(href, {name, message}, captcha) {
@@ -39,9 +37,7 @@ class CommentService {
                 body: secureString(message),
                 author: secureString(name)
             })
-        })
-            .then(res => { console.log('RESPONSE', res); return res;})
-            .then(response => response.data);
+        }).then(response => response.data);
     }
 }
 
