@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 
-import CommentService from '../service/CommentService';
-
 import Comment from './Comment';
 import LeaveMessageForm from './LeaveMessageForm';
 import Pagination from './Pagination';
 
 import './App.css';
-
-import Config from '../config.json';
-
-const restService = new CommentService(Config.ServiceHost, Config.CaptchaCookieName);
 
 const title = 'Leave a comment';
 const nextComments_label = 'Older';
@@ -19,8 +13,9 @@ class Comments extends Component {
     constructor(props) {
         super(props);
 
-        this.serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', props.articleId);
-        this.captchaCookieName = Config.CaptchaCookieName;
+        this.service = props.commentService;
+        this.serviceCommentsHref = props.serviceCommentsHref;
+        this.captchaCookieName = props.captchaCookieName;
 
         this.state = {
             comments: [],
@@ -30,6 +25,9 @@ class Comments extends Component {
 
         this.onLoadComments = this.onLoadComments.bind(this);
         this.onLeaveComment = this.onLeaveComment.bind(this);
+
+        this.loadComments = this.loadComments.bind(this);
+        this.loadAnswers = this.loadAnswers.bind(this);
         this.saveComment = this.saveComment.bind(this);
         this.saveAnswer = this.saveAnswer.bind(this);
     }
@@ -39,19 +37,19 @@ class Comments extends Component {
     }
 
     loadComments(href) {
-        return restService.loadComments(href);
+        return this.service.loadComments(href);
     }
 
     loadAnswers(href) {
-        return restService.loadAnswers(href);
+        return this.service.loadAnswers(href);
     }
 
     saveComment(comment, captcha) {
-        return restService.saveComment(this.serviceCommentsHref, comment, captcha);
+        return this.service.saveComment(this.serviceCommentsHref, comment, captcha);
     }
 
     saveAnswer(commentId, answer, captcha) {
-        return restService.saveAnswer(`${this.serviceCommentsHref}/${commentId}`, answer, captcha);
+        return this.service.saveAnswer(`${this.serviceCommentsHref}/${commentId}`, answer, captcha);
     }
 
     onLoadComments(href = this.state.next) {
