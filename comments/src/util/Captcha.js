@@ -12,7 +12,7 @@ class Captcha {
         const generateCode = (length = 4, abc = '23456789bcdfghkmnpqrstvwxyz') => {
             let code = '';
             for (let i = 0; i < length; i++) {
-                code += abc.charAt((Math.random() * 100) % abc.length);
+                code += abc.charAt(Math.floor(abc.length * Math.random()));
             }
             return code;
         }
