@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 class CommentService {
-    constructor(serviceApi, captchaCookieName) {
+    constructor(serviceApi) {
         this.serviceApi = serviceApi;
-        this.captchaCookieName = captchaCookieName;
     }
 
     loadComments(href) {
@@ -16,7 +15,7 @@ class CommentService {
            .then(response => response.data);
     }
 
-    saveComment(href, {name, message}, captcha) {
+    saveComment(href, {name, message}) {
         return axios({
             url: `${this.serviceApi}${href}`,
             method: 'post',
@@ -28,7 +27,7 @@ class CommentService {
         }).then(response => response.data);
     }
 
-    saveAnswer(href, {name, message}, captcha) {
+    saveAnswer(href, {name, message}) {
         return axios({
             url: `${this.serviceApi}${href}`,
             method: 'post',

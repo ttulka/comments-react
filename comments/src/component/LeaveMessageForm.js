@@ -14,7 +14,7 @@ class LeaveMessageForm extends Component {
 
         this.onLeaveMessage = props.onLeaveMessage;
 
-        this.captcha = new Captcha(this.captchaCookieName);
+        this.captcha = new Captcha();
         this.successMsg = props.successMsg || success_msg_def;
 
         this.formUUID = this.uniqueId();

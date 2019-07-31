@@ -14,7 +14,6 @@ class Comment extends Component {
         this.comment = props.comment;
         this.loadAnswers = props.loadAnswers;
         this.saveAnswer = props.saveAnswer;
-        this.captchaCookieName = props.captchaCookieName;
 
         this.state = {
             answers: props.comment.answers || [],
@@ -44,8 +43,8 @@ class Comment extends Component {
             });
     }
 
-    onLeaveAnswer(answer, captcha) {
-        return this.saveAnswer(this.comment.id, answer, captcha)
+    onLeaveAnswer(answer) {
+        return this.saveAnswer(this.comment.id, answer)
             .then(answer => this.setState({answers: [...this.state.answers, answer]}));
     }
 
@@ -95,9 +94,7 @@ class Comment extends Component {
                 {this.state.formVisible &&
                  <div className="p-3">
                      <h3>Your answer</h3>
-                     <LeaveMessageForm
-                         captchaCookieName={this.captchaCookieName}
-                         onLeaveMessage={this.onLeaveAnswer}/>
+                     <LeaveMessageForm onLeaveMessage={this.onLeaveAnswer}/>
                  </div>
                 }
                 </div>

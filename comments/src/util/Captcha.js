@@ -1,6 +1,5 @@
 class Captcha {
-    constructor(captchaCookieName) {
-        this.captchaCookieName = captchaCookieName;
+    constructor() {
         this.code = null;
     }
 

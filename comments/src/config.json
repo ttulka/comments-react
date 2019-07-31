@@ -1,5 +1,4 @@
 {
   "ServiceHost": "http://blog.net21.cz",
-  "ServiceComments": "/articles/[:articleId:]/comments",
-  "CaptchaCookieName": "blogcomment"
+  "ServiceComments": "/articles/[:articleId:]/comments"
 }

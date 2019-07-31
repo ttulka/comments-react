@@ -48,8 +48,8 @@ class Comments extends Component {
         return this.service.saveComment(this.serviceCommentsHref, comment, captcha);
     }
 
-    saveAnswer(commentId, answer, captcha) {
-        return this.service.saveAnswer(`${this.serviceCommentsHref}/${commentId}`, answer, captcha);
+    saveAnswer(commentId, answer) {
+        return this.service.saveAnswer(`${this.serviceCommentsHref}/${commentId}`, answer);
     }
 
     onLoadComments(href = this.state.next) {
