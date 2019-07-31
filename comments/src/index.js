@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Comments from './component/App';
 
 import Config from './config.json';
-import CommentService from './service/CommentServiceDev';
+import CommentService from './service/CommentService';
 
 const commentService = new CommentService(Config.ServiceHost);
 
