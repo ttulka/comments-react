@@ -75,12 +75,12 @@ class LeaveMessageForm extends Component {
             this.setState({nameValid: false});
             hasError = true;
         }
-        if (!this.state.captcha) {
-            this.setState({captchaValid: false});
-            hasError = true;
-        }
         if (!this.state.message) {
             this.setState({messageValid: false});
+            hasError = true;
+        }
+        if (!this.state.captcha) {
+            this.setState({captchaValid: false});
             hasError = true;
         }
 
