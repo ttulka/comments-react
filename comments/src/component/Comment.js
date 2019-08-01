@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Linkify from 'react-linkify';
 
 import LeaveMessageForm from './LeaveMessageForm';
 import Pagination from './Pagination';
@@ -72,7 +73,7 @@ class Comment extends Component {
                 <a onClick={this.onReply} className="reply" href="#">Reply</a>
             </div>
             <div className="body card-body">
-                {body}
+                <Linkify>{body}</Linkify>
             </div>
 
             <div className="answers">
@@ -120,7 +121,7 @@ class Answer extends Component {
                 <span className="createdAt">{formattedDate(createdAt)}</span>
             </div>
             <div className="body">
-                {body}
+                <Linkify>{body}</Linkify>
             </div>
         </div>
         );
