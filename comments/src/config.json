@@ -1,4 +1,4 @@
 {
-  "ServiceHost": "http://blog.net21.cz",
+  "ServiceHost": "http://blog.ttulka.com",
   "ServiceComments": "/articles/[:articleId:]/comments"
 }
