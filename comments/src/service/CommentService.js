@@ -48,10 +48,10 @@ function secureString(str, maxLength = 1000) {
     return /*encodedString(*/str.substring(0, maxLength)/*)*/;
 }
 
-function encodedString(rawStr) {
-    return rawStr.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-        return '&#'+i.charCodeAt(0)+';';
-    });
-}
+// function encodedString(rawStr) {
+//     return rawStr.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+//         return '&#'+i.charCodeAt(0)+';';
+//     });
+// }
 
 export default CommentService;

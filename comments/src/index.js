@@ -8,9 +8,9 @@ import CommentService from './service/CommentService';
 const commentService = new CommentService(Config.ServiceHost);
 
 const commentsDiv = document.getElementById('comments');
-const articleId = commentsDiv.getAttribute('articleId');
+const postId = commentsDiv.getAttribute('postId');
 
-const serviceCommentsHref = Config.ServiceComments.replace('[:articleId:]', articleId);
+const serviceCommentsHref = Config.ServiceComments.replace('[:postId:]', postId);
 
 ReactDOM.render(
     <Comments commentService={commentService}

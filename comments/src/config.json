@@ -1,4 +1,4 @@
 {
-  "ServiceHost": "http://blog.ttulka.com",
-  "ServiceComments": "/articles/[:articleId:]/comments"
+  "ServiceHost": "",
+  "ServiceComments": "/post/[:postId:]/comments"
 }
